@@ -609,42 +609,39 @@ with tab3:
     st.markdown("---")
  
     # ── Comparativa F1 por clase ──
-    st.subheader("F1-Score por clase — todos los modelos")
     rows_all = []
-    for mod in modelos:
-        rep = results[mod]["report"]
-        for cls in classes:
-            if cls in rep:
-                rows_all.append({"Modelo": mod, "Clase": cls, "F1-Score": round(rep[cls]["f1-score"], 3)})
-    df_f1 = pd.DataFrame(rows_all)
- 
-    modelos_order = ["KNN (k=5)", "Naïve Bayes", "Árbol de Decisión", "Random Forest", "Gamma-Pydra"]
-    colores = ["#00D4FF", "#4ECDC4", "#FFB347", "#FF6B6B", "#9B59B6"]
+for mod in modelos:
+    rep = results[mod]["report"]
+    for cls in classes:
+        if cls in rep:
+            rows_all.append({"Modelo": mod, "Clase": cls, "F1-Score": round(rep[cls]["f1-score"], 3)})
+df_f1 = pd.DataFrame(rows_all)
 
-    fig_f1 = go.Figure()
-    
-    for mod, color in zip(modelos_order, colores):
-      subset = df_f1[df_f1["Modelo"] == mod]
+colores_f1 = {"KNN (k=5)": "#00D4FF", "Naïve Bayes": "#4ECDC4", "Árbol de Decisión": "#FFB347", "Random Forest": "#FF6B6B", "Gamma-Pydra": "#9B59B6"}
+
+fig_f1 = go.Figure()
+for mod in modelos:
+    subset = df_f1[df_f1["Modelo"] == mod]
     fig_f1.add_trace(go.Bar(
         name=mod,
-        x=subset["Clase"],
-        y=subset["F1-Score"],
-        text=subset["F1-Score"].round(3),
+        x=subset["Clase"].tolist(),
+        y=subset["F1-Score"].tolist(),
+        text=[f"{v:.3f}" for v in subset["F1-Score"].tolist()],
         textposition="outside",
-        marker_color=color,
+        marker_color=colores_f1[mod],
         textfont=dict(size=9)
     ))
 
-    fig_f1.update_layout(
-      barmode="group",
-      template="plotly_dark",
-      height=420,
-      yaxis=dict(range=[0.7, 1.08]),
-      legend=dict(orientation="h", y=-0.25),
-      bargap=0.2,
-      bargroupgap=0.05
-    )
-    st.plotly_chart(fig_f1, use_container_width=True)
+fig_f1.update_layout(
+    barmode="group",
+    template="plotly_dark",
+    height=420,
+    yaxis=dict(range=[0.7, 1.08]),
+    legend=dict(orientation="h", y=-0.25),
+    bargap=0.2,
+    bargroupgap=0.05
+)
+st.plotly_chart(fig_f1, use_container_width=True)
  
     st.markdown("---")
  
