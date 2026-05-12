@@ -1,2 +1,7 @@
-pip install streamlit scikit-learn plotly pandas numpy
-streamlit run app_gamma.py
+streamlit
+pandas
+numpy
+matplotlib
+seaborn
+scikit-learn
+plotly
