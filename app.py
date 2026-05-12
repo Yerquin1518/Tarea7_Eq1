@@ -61,6 +61,7 @@ st.markdown("""
         border-radius: 8px;
         padding: 16px;
     }
+    [data-testid="stMetricValue"], [data-testid="stMetricLabel"] { color: white !important; }
 </style>
 """, unsafe_allow_html=True)
  
@@ -227,7 +228,7 @@ with st.spinner("Entrenando modelos..."):
 # HEADER
 # ─────────────────────────────────────────────
 st.title("Clasificador Gamma-Pydra")
-st.markdown("**Tarea 7 · Equipo 1 · Presentación de Resultados**")
+st.markdown("**Tarea 7 · Equipo 1 · Resultados**")
 st.markdown("---")
  
 tab1, tab2, tab3 = st.tabs(["¿Qué es Gamma?", "Dataset", "Comparativa de Modelos"])
