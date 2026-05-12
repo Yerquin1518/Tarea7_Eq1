@@ -237,94 +237,71 @@ tab1, tab2, tab3 = st.tabs(["¿Qué es Gamma?", "Dataset", "Comparativa de Model
 # ═══════════════════════════════════════════════════════
 with tab1:
     st.header("El Clasificador Gamma")
-    st.markdown("""
-    El **Clasificador Gamma** es un método de clasificación basado en similitud por umbrales,
-    desarrollado como alternativa a modelos como KNN o SVM. En lugar de medir distancias métricas,
-    define si dos valores son "similares" mediante el operador **γ** y un parámetro de tolerancia **θ**.
-    """)
+    st.markdown(
+        "Clasificador de alto desempeño basado en un **operador de similitud γ** que indica "
+        "si dos patrones son parecidos dado un grado de disimilitud **θ**. "
+        "Solo funciona con datos numéricos enteros (requiere escalar los valores)."
+    )
  
     st.markdown("---")
     col1, col2 = st.columns(2)
  
     with col1:
-        st.subheader("Operador γ (Gamma)")
-        st.markdown("""
-        <div class="card">
-        El operador γ compara dos valores escalares <b>xₐ</b> y <b>x_b</b> con un umbral θ:
-        </div>
-        """, unsafe_allow_html=True)
+        st.subheader("Operador γ")
         st.latex(r"""
-        \gamma(x_a,\, x_b,\, \theta) =
+        \gamma_g(x, y, \theta) =
         \begin{cases}
-        1 & \text{si } |x_a - x_b| \leq \theta \\
-        0 & \text{si } |x_a - x_b| > \theta
+        1 & \text{si } (m - u_\beta^\alpha(x,y)) \bmod 2 \leq \theta \\
+        0 & \text{en otro caso}
         \end{cases}
         """)
         st.markdown("""
-        - Retorna **1** cuando los valores son suficientemente similares.
-        - Retorna **0** cuando difieren más que el umbral **θ**.
-        - θ comienza en **0** y se incrementa de a 1 hasta resolver empates.
+        - Retorna **1** si los valores son similares bajo θ.
+        - Retorna **0** si difieren más de lo permitido.
+        - θ inicia en **0** y sube de 1 en 1 cuando hay empate.
         """)
  
     with col2:
-        st.subheader("Score por clase")
-        st.markdown("""
-        <div class="card card-green">
-        El score de un patrón de prueba <b>x</b> frente a una clase <b>C</b> es el máximo de las sumas ponderadas contra todos los patrones de entrenamiento de esa clase:
-        </div>
-        """, unsafe_allow_html=True)
+        st.subheader("Score por clase (Cᵢ)")
         st.latex(r"""
-        \text{score}(x, C) = \max_{k \in C}\ \sum_{j=1}^{d} w_j \cdot \gamma(x_j,\, x_j^{(k)},\, \theta)
+        C_i = \frac{1}{|C_i|} \sum_{\mu \in C_i} \sum_{j=1}^{n} w_j\, \gamma_g(x_j^\mu,\, \tilde{x}_j^\mu,\, \theta)
         """)
         st.markdown("""
-        - **w_j**: peso de la dimensión *j* (por defecto todos = 1).
-        - El patrón se asigna a la clase con mayor score.
-        - Si hay empate, θ sube y se reevalúa hasta **ρ** (umbral de paro).
+        - Se calcula para cada clase el **promedio** de sumas ponderadas.
+        - Se asigna la clase con **mayor Cᵢ**.
+        - Si hay empate y **θ < ρ** → incrementar θ y recalcular.
+        - Si **θ ≥ ρ** → asignar la primera clase en lista.
         """)
  
     st.markdown("---")
  
-    st.subheader("Parámetro de paro ρ (rho)")
-    col_a, col_b, col_c = st.columns(3)
+    col_a, col_b = st.columns(2)
     with col_a:
+        st.subheader("Variable de paro ρ")
         st.markdown("""
         <div class="card">
-        <b>ρ (modo max)</b><br>
-        Máximo de todas las diferencias absolutas entre pares de patrones de entrenamiento. Es el umbral más conservador.
+        Garantiza que el algoritmo siempre termina. Dos opciones:
+        <ul>
+            <li><b>Mínimo de los máximos</b> por dimensión.</li>
+            <li><b>Máximo de los máximos</b> (más conservador).</li>
+        </ul>
         </div>
         """, unsafe_allow_html=True)
+ 
     with col_b:
-        st.markdown("""
-        <div class="card card-green">
-        <b>ρ (modo min)</b><br>
-        Mínimo de los máximos por dimensión. Más restrictivo; detiene la búsqueda antes.
-        </div>
-        """, unsafe_allow_html=True)
-    with col_c:
-        st.markdown("""
-        <div class="card card-orange">
-        <b>Rol de ρ</b><br>
-        Si θ supera ρ sin resolver el empate, se elige al primer ganador por orden. Garantiza que el algoritmo siempre termina.
-        </div>
-        """, unsafe_allow_html=True)
- 
-    st.markdown("---")
- 
-    st.subheader("Algoritmo de clasificación — Paso a paso")
-    st.markdown("""
-    <div class="card">
-    <ol>
-        <li>Inicializar <b>θ = 0</b>.</li>
-        <li>Para cada clase, calcular su score máximo contra el patrón a clasificar.</li>
-        <li>Seleccionar la clase con el score más alto.</li>
-        <li>Si hay <b>un único ganador</b> → asignar esa clase. </li>
-        <li>Si hay <b>empate</b> y θ < ρ → incrementar θ en 1 y repetir desde el paso 2.</li>
-        <li>Si θ ≥ ρ → elegir al primer ganador en lista. </li>
-    </ol>
-    </div>
-    """, unsafe_allow_html=True)
- 
-    st.markdown("---")
+        st.subheader("Extensión PYDRA — Valores perdidos")
+        st.markdown("Cuando hay NaN, se elige una de 8 variantes según la combinación (C = conocido, ? = perdido):")
+        pydra_data = {
+            "Xa \\ Xb": ["C", "?", "?"],
+            "C":  ["γg normal", "0", "0"],
+            "?":  ["0 / 1", "0 / 1", "0 / 1"],
+        }
+        st.table(pd.DataFrame({
+            "Xa \\ Xb": ["C (conocido)", "? (perdido)", "? (perdido)"],
+            "Xb = C": ["γg(x,y,θ)", "0 ó 1", "—"],
+            "Xb = ?": ["0 ó 1", "0 ó 1", "—"],
+        }).set_index("Xa \\ Xb"))
+        st.caption("La variante elegida (0-7) define qué valor retorna γg cuando uno o ambos son NaN.")
  
 # ═══════════════════════════════════════════════════════
 # TAB 2 — DATASET
