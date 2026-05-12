@@ -622,7 +622,7 @@ with tab3:
     colores = ["#00D4FF", "#4ECDC4", "#FFB347", "#FF6B6B", "#9B59B6"]
 
     fig_f1 = go.Figure()
-      for mod, color in zip(modelos_order, colores):
+     for mod, color in zip(modelos_order, colores):
       subset = df_f1[df_f1["Modelo"] == mod]
     fig_f1.add_trace(go.Bar(
         name=mod,
