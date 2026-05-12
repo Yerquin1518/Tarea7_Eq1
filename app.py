@@ -226,11 +226,11 @@ with st.spinner("Entrenando modelos..."):
 # ─────────────────────────────────────────────
 # HEADER
 # ─────────────────────────────────────────────
-st.title("🐧 Clasificador Gamma-Pydra")
+st.title("Clasificador Gamma-Pydra")
 st.markdown("**Tarea 7 · Equipo 1 · Presentación de Resultados**")
 st.markdown("---")
  
-tab1, tab2, tab3 = st.tabs(["🧠 ¿Qué es Gamma?", "📊 Dataset", "📈 Comparativa de Modelos"])
+tab1, tab2, tab3 = st.tabs(["¿Qué es Gamma?", "Dataset", "Comparativa de Modelos"])
  
 # ═══════════════════════════════════════════════════════
 # TAB 1 — EXPLICACIÓN DEL CLASIFICADOR GAMMA
@@ -247,7 +247,7 @@ with tab1:
     col1, col2 = st.columns(2)
  
     with col1:
-        st.subheader("⚙️ Operador γ (Gamma)")
+        st.subheader("Operador γ (Gamma)")
         st.markdown("""
         <div class="card">
         El operador γ compara dos valores escalares <b>xₐ</b> y <b>x_b</b> con un umbral θ:
@@ -267,7 +267,7 @@ with tab1:
         """)
  
     with col2:
-        st.subheader("📐 Score por clase")
+        st.subheader("Score por clase")
         st.markdown("""
         <div class="card card-green">
         El score de un patrón de prueba <b>x</b> frente a una clase <b>C</b> es el máximo de las sumas ponderadas contra todos los patrones de entrenamiento de esa clase:
@@ -284,7 +284,7 @@ with tab1:
  
     st.markdown("---")
  
-    st.subheader("🔄 Parámetro de paro ρ (rho)")
+    st.subheader("Parámetro de paro ρ (rho)")
     col_a, col_b, col_c = st.columns(3)
     with col_a:
         st.markdown("""
@@ -350,32 +350,6 @@ with tab1:
     """, unsafe_allow_html=True)
  
     st.markdown("---")
-    st.subheader("💻 Implementación clave: `_classify_one`")
-    st.code("""
-def _classify_one(self, sample):
-    theta = 0.0
- 
-    while True:
-        scores = {}
-        for cls in self.classes_:
-            mask = self.y_train_ == cls
-            X_cls = self.X_train_[mask]
-            scores[cls] = max(
-                self._weighted_sum(sample, X_cls[k], theta)
-                for k in range(len(X_cls))
-            )
- 
-        max_score = max(scores.values())
-        winners = [c for c, s in scores.items() if s == max_score]
- 
-        if len(winners) == 1:
-            return winners[0]       # Ganador único → clasificar
- 
-        if theta < self.rho_:
-            theta += 1.0            # Empate → ampliar umbral
-        else:
-            return winners[0]       # Llegamos a rho → desempate por orden
-    """, language="python")
  
 # ═══════════════════════════════════════════════════════
 # TAB 2 — DATASET
