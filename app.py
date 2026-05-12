@@ -608,43 +608,6 @@ with tab3:
  
     st.markdown("---")
  
-    # ── Comparativa F1 por clase ──
-    rows_all = []
-    
-    for mod in modelos:
-      rep = results[mod]["report"]
-      for cls in classes:
-        if cls in rep:
-            rows_all.append({"Modelo": mod, "Clase": cls, "F1-Score": round(rep[cls]["f1-score"], 3)})
-            df_f1 = pd.DataFrame(rows_all)
-
-    colores_f1 = {"KNN (k=5)": "#00D4FF", "Naïve Bayes": "#4ECDC4", "Árbol de Decisión": "#FFB347", "Random Forest": "#FF6B6B", "Gamma-Pydra": "#9B59B6"}
-
-    fig_f1 = go.Figure()
-    for mod in modelos:
-      subset = df_f1[df_f1["Modelo"] == mod]
-    fig_f1.add_trace(go.Scatter(
-        name=mod,
-        x=subset["Clase"].tolist(),
-        y=subset["F1-Score"].tolist(),
-        mode="lines+markers+text",
-        text=[f"{v:.3f}" for v in subset["F1-Score"].tolist()],
-        textposition="top center",
-        textfont=dict(size=10),
-        marker=dict(size=10, color=colores_f1[mod]),
-        line=dict(color=colores_f1[mod], width=2)
-    ))
-
-    fig_f1.update_layout(
-      template="plotly_dark",
-      height=420,
-      yaxis=dict(range=[0.65, 1.1]),
-      legend=dict(orientation="h", y=-0.25),
-    )
-    st.plotly_chart(fig_f1, use_container_width=True)
- 
-    st.markdown("---")
- 
     # ── Conclusión ──
     best_model = df_acc.iloc[0]["Modelo"]
     best_acc = df_acc.iloc[0]["Accuracy (%)"]
