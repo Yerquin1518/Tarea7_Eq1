@@ -417,7 +417,7 @@ with tab2:
             df_eda, x=var, color="species",
             barmode="overlay",
             color_discrete_map=color_map,
-            opacity=0.7,
+            opacity=0.5,
             labels={"species": "Especie", var: labels_map[var]},
             template="plotly_dark"
         )
@@ -445,7 +445,7 @@ with tab2:
             df_sex, x=var, color="sex",
             barmode="overlay",
             color_discrete_map=sex_color_map,
-            opacity=0.75,
+            opacity=0.5,
             nbins=20,
             labels={"sex": "Sexo", var: labels_map[var]},
             template="plotly_dark"
@@ -619,15 +619,20 @@ with tab3:
     df_f1 = pd.DataFrame(rows_all)
  
     fig_f1 = px.bar(
-        df_f1, x="Clase", y="F1-Score", color="Modelo",
-        barmode="group",
-        color_discrete_sequence=["#00D4FF", "#4ECDC4", "#FFB347", "#FF6B6B", "#9B59B6"],
-        template="plotly_dark",
-        range_y=[0.7, 1.05],
-        text="F1-Score"
+      df_f1, x="Clase", y="F1-Score", color="Modelo",
+      barmode="group",
+      color_discrete_sequence=["#00D4FF", "#4ECDC4", "#FFB347", "#FF6B6B", "#9B59B6"],
+      template="plotly_dark",
+      range_y=[0.7, 1.05],
+      text="F1-Score"
+    )
+    fig_f1.update_layout(
+      height=420,
+      legend=dict(orientation="h", y=-0.25),
+      bargap=0.15,       # <-- agrega esto
+      bargroupgap=0.05   # <-- y esto
     )
     fig_f1.update_traces(texttemplate="%{text:.3f}", textposition="outside", textfont_size=9)
-    fig_f1.update_layout(height=420, legend=dict(orientation="h", y=-0.25))
     st.plotly_chart(fig_f1, use_container_width=True)
  
     st.markdown("---")
