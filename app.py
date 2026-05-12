@@ -290,18 +290,29 @@ with tab1:
  
     with col_b:
         st.subheader("Extensión PYDRA — Valores perdidos")
-        st.markdown(":white[Cuando hay NaN, se elige una de 8 variantes según la combinación (C = conocido, ? = perdido):]")
-        pydra_data = {
-            "Xa \\ Xb": ["C", "?", "?"],
-            "C":  ["γg normal", "0", "0"],
-            "?":  ["0 / 1", "0 / 1", "0 / 1"],
-        }
-        st.table(pd.DataFrame({
-            "Xa \\ Xb": ["C (conocido)", "? (perdido)", "? (perdido)"],
-            "Xb = C": ["γg(x,y,θ)", "0 ó 1", "—"],
-            "Xb = ?": ["0 ó 1", "0 ó 1", "—"],
-        }).set_index("Xa \\ Xb"))
-        st.caption("La variante elegida (0-7) define qué valor retorna γg cuando uno o ambos son NaN.")
+        st.markdown("""
+<table style="color:white; border-collapse:collapse; width:100%">
+    <thead>
+        <tr>
+            <th style="border:1px solid #444; padding:8px">Xa \\ Xb</th>
+            <th style="border:1px solid #444; padding:8px">Xb = C</th>
+            <th style="border:1px solid #444; padding:8px">Xb = ?</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="border:1px solid #444; padding:8px">C (conocido)</td>
+            <td style="border:1px solid #444; padding:8px">γg(x,y,θ)</td>
+            <td style="border:1px solid #444; padding:8px">0 ó 1</td>
+        </tr>
+        <tr>
+            <td style="border:1px solid #444; padding:8px">? (perdido)</td>
+            <td style="border:1px solid #444; padding:8px">0 ó 1</td>
+            <td style="border:1px solid #444; padding:8px">0 ó 1</td>
+        </tr>
+    </tbody>
+</table>
+""", unsafe_allow_html=True)
  
 # ═══════════════════════════════════════════════════════
 # TAB 2 — DATASET
