@@ -618,9 +618,14 @@ with tab3:
     with col_c1:
         st.markdown(f"""
         <div class="card" style="margin-top:12px">
-        En esta tarea utilizamos el clasificador Gamma Pydra para identificar las tres especies de pingüinos: Adelie, Chinstrap y Gentoo. Después de realizar un proceso completo de carga, exploración, limpieza y preprocesamiento de los datos el modelo logró un 89.55% de accuracy.<br>
-Las características más importantes para diferenciar las especies fueron el largo del pico, la longitud de las aletas y el peso de los pingüinos. Aunque el clasificador obtuvo un buen desempeño, superando a Naive Bayes con un 71.64%, no alcanzó a KNN con 98.51%, o al árbol de decisión ni a Random Forest, que ambos obtuvieron un 100% de accuracy.
-A pesar de no ser el mejor modelo, el clasificador Gamma Pydra demostró ser útil y funcional. Esta práctica nos permitió entender mejor el proceso completo de un proyecto de clasificación y nos enseñó la importancia de probar diferentes algoritmos, ya que cada uno puede comportarse distinto según el tipo de datos.
+        En esta tarea utilizamos el clasificador Gamma Pydra para identificar las tres especies de pingüinos: Adelie, Chinstrap y Gentoo. 
+        Después de realizar un proceso completo de carga, exploración, limpieza y preprocesamiento de los datos el modelo logró un 89.55% de accuracy.<br>
+        Las características más importantes para diferenciar las especies fueron el largo del pico, la longitud de las aletas y el peso de los pingüinos. 
+        Aunque el clasificador obtuvo un buen desempeño, superando a Naive Bayes con un 71.64%, no alcanzó a KNN con 98.51%, o al árbol de decisión ni a 
+        Random Forest, que ambos obtuvieron un 100% de accuracy.<br>
+        A pesar de no ser el mejor modelo, el clasificador Gamma Pydra demostró ser útil y funcional. Esta práctica nos permitió entender mejor el proceso 
+        completo de un proyecto de clasificación y nos enseñó la importancia de probar diferentes algoritmos, ya que cada uno puede comportarse distinto 
+        según el tipo de datos.
         </div>
         """, unsafe_allow_html=True)
     with col_c2:
