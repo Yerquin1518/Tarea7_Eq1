@@ -290,7 +290,7 @@ with tab1:
  
     with col_b:
         st.subheader("Extensión PYDRA — Valores perdidos")
-        st.markdown("Cuando hay NaN, se elige una de 8 variantes según la combinación (C = conocido, ? = perdido):")
+        st.markdown(":white[Cuando hay NaN, se elige una de 8 variantes según la combinación (C = conocido, ? = perdido):]")
         pydra_data = {
             "Xa \\ Xb": ["C", "?", "?"],
             "C":  ["γg normal", "0", "0"],
