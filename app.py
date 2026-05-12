@@ -618,21 +618,31 @@ with tab3:
                 rows_all.append({"Modelo": mod, "Clase": cls, "F1-Score": round(rep[cls]["f1-score"], 3)})
     df_f1 = pd.DataFrame(rows_all)
  
-    fig_f1 = px.bar(
-      df_f1, x="Clase", y="F1-Score", color="Modelo",
-      barmode="group",
-      color_discrete_sequence=["#00D4FF", "#4ECDC4", "#FFB347", "#FF6B6B", "#9B59B6"],
-      template="plotly_dark",
-      range_y=[0.7, 1.05],
-      text="F1-Score"
-    )
+    modelos_order = ["KNN (k=5)", "Naïve Bayes", "Árbol de Decisión", "Random Forest", "Gamma-Pydra"]
+    colores = ["#00D4FF", "#4ECDC4", "#FFB347", "#FF6B6B", "#9B59B6"]
+
+    fig_f1 = go.Figure()
+      for mod, color in zip(modelos_order, colores):
+      subset = df_f1[df_f1["Modelo"] == mod]
+    fig_f1.add_trace(go.Bar(
+        name=mod,
+        x=subset["Clase"],
+        y=subset["F1-Score"],
+        text=subset["F1-Score"].round(3),
+        textposition="outside",
+        marker_color=color,
+        textfont=dict(size=9)
+    ))
+
     fig_f1.update_layout(
+      barmode="group",
+      template="plotly_dark",
       height=420,
+      yaxis=dict(range=[0.7, 1.08]),
       legend=dict(orientation="h", y=-0.25),
-      bargap=0.15,       # <-- agrega esto
-      bargroupgap=0.05   # <-- y esto
+      bargap=0.2,
+      bargroupgap=0.05
     )
-    fig_f1.update_traces(texttemplate="%{text:.3f}", textposition="outside", textfont_size=9)
     st.plotly_chart(fig_f1, use_container_width=True)
  
     st.markdown("---")
