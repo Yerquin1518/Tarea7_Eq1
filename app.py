@@ -622,27 +622,25 @@ with tab3:
 
     fig_f1 = go.Figure()
     for mod in modelos:
-       subset = df_f1[df_f1["Modelo"] == mod]
-       fig_f1.add_trace(go.Bar(
-         name=mod,
-         x=subset["Clase"].tolist(),
-         y=subset["F1-Score"].tolist(),
-         text=[f"{v:.3f}" for v in subset["F1-Score"].tolist()],
-         textposition="outside",
-         marker_color=colores_f1[mod],
-         textfont=dict(size=9)
+      subset = df_f1[df_f1["Modelo"] == mod]
+    fig_f1.add_trace(go.Scatter(
+        name=mod,
+        x=subset["Clase"].tolist(),
+        y=subset["F1-Score"].tolist(),
+        mode="lines+markers+text",
+        text=[f"{v:.3f}" for v in subset["F1-Score"].tolist()],
+        textposition="top center",
+        textfont=dict(size=10),
+        marker=dict(size=10, color=colores_f1[mod]),
+        line=dict(color=colores_f1[mod], width=2)
     ))
 
     fig_f1.update_layout(
-      barmode="group",
       template="plotly_dark",
       height=420,
-      yaxis=dict(range=[0.7, 1.08]),
+      yaxis=dict(range=[0.65, 1.1]),
       legend=dict(orientation="h", y=-0.25),
-      bargap=0.2,
-      bargroupgap=0.05
     )
-    
     st.plotly_chart(fig_f1, use_container_width=True)
  
     st.markdown("---")
