@@ -319,7 +319,7 @@ with tab1:
 # TAB 2 — DATASET
 # ═══════════════════════════════════════════════════════
 with tab2:
-    st.header("Dataset: Palmer Penguins 🐧")
+    st.header("Dataset: Palmer Penguins")
     st.markdown(
         '<p style="color:white;">El dataset <b>Palmer Penguins</b> contiene mediciones morfológicas de <b>344 pingüinos</b> '
         'de tres especies distintas, recolectadas en las islas del archipiélago Palmer (Antártida). '
