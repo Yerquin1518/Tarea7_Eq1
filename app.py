@@ -15,12 +15,8 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
  
-# ─────────────────────────────────────────────
-# CONFIG
-# ─────────────────────────────────────────────
 st.set_page_config(
     page_title="Clasificador Gamma-Pydra",
-    page_icon="🐧",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
