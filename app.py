@@ -310,41 +310,16 @@ with tab1:
  
     st.markdown("---")
  
-    st.subheader("🧬 Extensión PYDRA — Valores Perdidos")
-    st.markdown("""
-    La extensión **PYDRA** adapta el operador γ para manejar **NaN** sin eliminar instancias ni imputar valores artificialmente:
-    """)
- 
-    col_left, col_right = st.columns([1, 1])
-    with col_left:
-        st.latex(r"""
-        \gamma_{\text{PYDRA}}(x_a, x_b, \theta) =
-        \begin{cases}
-        1 & \text{si } x_a = \text{NaN} \land x_b = \text{NaN} \\
-        0 & \text{si } x_a = \text{NaN} \oplus x_b = \text{NaN} \\
-        \gamma(x_a, x_b, \theta) & \text{en otro caso}
-        \end{cases}
-        """)
-    with col_right:
-        st.markdown("""
-        | Situación | Resultado |
-        |---|---|
-        | Ambos son NaN | **1** → se asumen similares |
-        | Solo uno es NaN | **0** → no contribuye al score |
-        | Ninguno es NaN | Se aplica γ normal con θ |
-        """)
- 
-    st.markdown("---")
-    st.subheader("🔁 Algoritmo de clasificación — Paso a paso")
+    st.subheader("Algoritmo de clasificación — Paso a paso")
     st.markdown("""
     <div class="card">
     <ol>
         <li>Inicializar <b>θ = 0</b>.</li>
         <li>Para cada clase, calcular su score máximo contra el patrón a clasificar.</li>
         <li>Seleccionar la clase con el score más alto.</li>
-        <li>Si hay <b>un único ganador</b> → asignar esa clase. ✅</li>
+        <li>Si hay <b>un único ganador</b> → asignar esa clase. </li>
         <li>Si hay <b>empate</b> y θ < ρ → incrementar θ en 1 y repetir desde el paso 2.</li>
-        <li>Si θ ≥ ρ → elegir al primer ganador en lista. 🏁</li>
+        <li>Si θ ≥ ρ → elegir al primer ganador en lista. </li>
     </ol>
     </div>
     """, unsafe_allow_html=True)
