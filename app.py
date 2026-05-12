@@ -319,11 +319,12 @@ with tab1:
 # ═══════════════════════════════════════════════════════
 with tab2:
     st.header("Dataset: Palmer Penguins 🐧")
-    st.markdown("""
-    El dataset **Palmer Penguins** contiene mediciones morfológicas de **344 pingüinos**
-    de tres especies distintas, recolectadas en las islas del archipiélago Palmer (Antártida).
-    Es ampliamente usado como alternativa al dataset Iris para tareas de clasificación multiclase.
-    """)
+    st.markdown(
+        '<p style="color:white;">El dataset <b>Palmer Penguins</b> contiene mediciones morfológicas de <b>344 pingüinos</b> '
+        'de tres especies distintas, recolectadas en las islas del archipiélago Palmer (Antártida). '
+        'Es ampliamente usado como alternativa al dataset Iris para tareas de clasificación multiclase.</p>',
+        unsafe_allow_html=True
+    )
  
     st.markdown("---")
  
@@ -431,7 +432,9 @@ with tab2:
     st.markdown("---")
     st.subheader("EDA — Distribuciones por sexo")
  
-    df_sex = df_raw.dropna(subset=["sex"] + numeric_vars)
+    df_sex = df_raw.dropna(subset=["sex"] + numeric_vars).copy()
+    # Normalizar valores de sexo a Male/Female sin importar el formato original
+    df_sex["sex"] = df_sex["sex"].astype(str).str.strip().str.capitalize()
     df_sex = df_sex[df_sex["sex"].isin(["Male", "Female"])]
     sex_color_map = {"Male": "#00D4FF", "Female": "#FF6B6B"}
  
@@ -441,7 +444,8 @@ with tab2:
             df_sex, x=var, color="sex",
             barmode="overlay",
             color_discrete_map=sex_color_map,
-            opacity=0.7,
+            opacity=0.75,
+            nbins=20,
             labels={"sex": "Sexo", var: labels_map[var]},
             template="plotly_dark"
         )
@@ -453,6 +457,35 @@ with tab2:
         else:
             with col_s2:
                 st.plotly_chart(fig_s, use_container_width=True)
+ 
+    st.markdown("---")
+    st.subheader("PCA — Reducción a 2 dimensiones")
+    st.markdown('<p style="color:white;">Proyección de todas las variables numéricas en 2 componentes principales, coloreado por especie.</p>', unsafe_allow_html=True)
+ 
+    from sklearn.decomposition import PCA
+    df_pca_input = df_clean.drop("species", axis=1).select_dtypes(include=[np.number])
+    pca_2d = PCA(n_components=2)
+    coords_2d = pca_2d.fit_transform(df_pca_input)
+    df_pca_plot = pd.DataFrame({
+        "PC1": coords_2d[:, 0],
+        "PC2": coords_2d[:, 1],
+        "Especie": df_clean["species"].values
+    })
+    var_exp = pca_2d.explained_variance_ratio_ * 100
+ 
+    fig_pca = px.scatter(
+        df_pca_plot, x="PC1", y="PC2", color="Especie",
+        color_discrete_map={"Adelie": "#00D4FF", "Chinstrap": "#4ECDC4", "Gentoo": "#FF6B6B"},
+        opacity=0.8,
+        labels={
+            "PC1": f"PC1 ({var_exp[0]:.1f}% varianza)",
+            "PC2": f"PC2 ({var_exp[1]:.1f}% varianza)"
+        },
+        template="plotly_dark"
+    )
+    fig_pca.update_layout(height=450, legend=dict(orientation="h", y=-0.15))
+    st.plotly_chart(fig_pca, use_container_width=True)
+    st.caption(f"Varianza explicada total: {sum(var_exp):.1f}%")
  
 # ═══════════════════════════════════════════════════════
 # TAB 3 — COMPARATIVA DE MODELOS
@@ -603,13 +636,10 @@ with tab3:
     best_acc = df_acc.iloc[0]["Accuracy (%)"]
     gamma_acc = results["Gamma-Pydra"]["acc"] * 100
  
-    st.subheader("📝 Conclusiones")
+    st.subheader("Conclusiones")
     col_c1, col_c2 = st.columns(2)
     with col_c1:
         st.markdown(f"""
-        <div class="card card-green">
-        <b>Mejor modelo general:</b> {best_model} con <b>{best_acc:.2f}%</b> de accuracy.
-        </div>
         <div class="card" style="margin-top:12px">
         <b>Gamma-Pydra</b> obtuvo <b>{gamma_acc:.2f}%</b> de accuracy, siendo un clasificador
         completamente implementado desde cero sin librerías de ML externas.
